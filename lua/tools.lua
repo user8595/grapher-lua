@@ -1,6 +1,12 @@
 local tools = {}
 local string = string
 
+---substring/truncation with fallback string
+---@param str string
+---@param i number
+---@param j number
+---@param def string 
+---@return string
 local function sub(str, i, j, def)
     return (string.len(string.sub(str, i, j)) > 0) and string.sub(str, i, j) or def
 end
@@ -24,6 +30,20 @@ function tools.hexrgb(hex, long)
     end
     local r1, g1, b1, a1 = tonumber(r, 16) / div, tonumber(g, 16) / div, tonumber(b, 16) / div, tonumber(a, 16) / div
     return { r1, g1, b1, a1 }
+end
+
+---evaluate hex string values
+---@param str string -- hex value to evaluate
+---@param offset number -- first string offset, 1 by default
+---@param lenoff number | nil -- defaults to 0
+---@return boolean
+function tools.hexeval(str, offset, lenoff)
+    local o = (type(offset) == "number") and offset or 1
+    local l = (type(lenoff) == "number") and lenoff or 0
+    if type(tonumber(string.sub(str, o, o + l), 16)) ~= "number" then
+        return false
+    end
+    return true
 end
 
 ---aabb bounding box collision detection

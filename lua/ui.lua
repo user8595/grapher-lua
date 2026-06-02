@@ -1,6 +1,6 @@
 local ui = {}
 local utf8 = require "utf8"
-local lg, lk, lm = love.graphics, love.keyboard, love.mouse
+local lg, ls, lk, lm = love.graphics, love.system, love.keyboard, love.mouse
 local tools = require "lua.tools"
 local bound = tools.bound
 
@@ -117,8 +117,10 @@ function ui.keyTBox(tab, k)
                 tb.selAll = false
             else
                 if tb.selAll then
-                    tb.str = ""
-                    tb.selAll = false
+                    if not lk.isDown("lctrl", "rctrl") then
+                        tb.str = ""
+                        tb.selAll = false
+                    end
                 end
             end
             if k == "backspace" then
@@ -137,20 +139,27 @@ function ui.keyTBox(tab, k)
                 end
                 tb.isEdit = false
             end
-            if lk.isDown("lctrl") and lk.isDown("c") or
-                lk.isDown("rctrl") and lk.isDown("c") then
 
-            end
-            if lk.isDown("lctrl") and lk.isDown("v") or
-                lk.isDown("rctrl") and lk.isDown("v") then
-
-            end
-            if lk.isDown("lctrl") and lk.isDown("a") or
-                lk.isDown("rctrl") and lk.isDown("a") then
-                if utf8.len(tb.str) > 0 then
-                    local _, len = tb.font:getWrap(tb.str, tb.w - tb.pad)
-                    tb.strlen = len
-                    tb.selAll = true
+            if lk.isDown("lctrl", "rctrl") then
+                if k == "a" then
+                    if utf8.len(tb.str) > 0 then
+                        local _, len = tb.font:getWrap(tb.str, tb.w - tb.pad)
+                        tb.strlen = len
+                        tb.selAll = true
+                    end
+                end
+                if k == "c" then
+                    if tb.selAll then
+                        if tb.str then ls.setClipboardText(tb.str) end
+                    end
+                end
+                if k == "v" then
+                    if tb.selAll then
+                        tb.strlen = {}
+                        tb.str = ""
+                        tb.selAll = false
+                    end
+                    tb.str = tb.str .. ls.getClipboardText()
                 end
             end
         end
@@ -164,7 +173,7 @@ function ui.clickTBox(tab, x, y, b)
         local tb = tab[i]
         if b == 1 then
             if bound(x, y, 0, 0, tb.x, tb.y, tb.w + tb.pad, tb.h) then
-                tb.isEdit = true
+                tb.isEdit = (not tb.isEdit) and true or false
             else
                 tb.isEdit = false
                 tb.selAll = false

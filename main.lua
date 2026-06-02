@@ -1,13 +1,13 @@
-local lk, le, lg = love.keyboard, love.event, love.graphics
-local fonts      = require "lua.default.fonts"
-local settings   = require "lua.default.settings"
-local states     = require "lua.default.states"
-local tBox       = require "lua.scenes.tBox"
-local debug      = require "lua.debug"
-local graph      = require "lua.graph"
-local ui         = require "lua.ui"
-local tools      = require "lua.tools"
-local points     = {}
+local lk, lw, le, lg = love.keyboard, love.window, love.event, love.graphics
+local fonts          = require "lua.default.fonts"
+local settings       = require "lua.default.settings"
+local states         = require "lua.default.states"
+local tBox           = require "lua.scenes.tBox"
+local debug          = require "lua.debug"
+local graph          = require "lua.graph"
+local ui             = require "lua.ui"
+local tools          = require "lua.tools"
+local points         = {}
 
 function love.load()
     if arg[2] == "debug" then
@@ -26,6 +26,9 @@ function love.keypressed(k)
     end
     if k == "f4" then
         states.isDebug = (not states.isDebug) and true or false
+    end
+    if k == "f11" or lk.isDown("lalt", "ralt") and lk.isDown("return") then
+        lw.setFullscreen((not lw.getFullscreen()) and true or false)
     end
     ui.keyTBox(tBox[states.scene], k)
 end

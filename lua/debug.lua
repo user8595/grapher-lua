@@ -1,7 +1,7 @@
 local debug = {}
 local lt, lg = love.timer, love.graphics
 local fonts = require "lua.default.fonts"
-local states= require "lua.default.states"
+local states = require "lua.default.states"
 
 function debug.sDraw()
     local w, h = lg.getDimensions()
