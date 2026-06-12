@@ -1,6 +1,9 @@
 local settings = {
     scale = 1,
-    bgcol = "#812739", -- a coincidence
+    showtime = true,
+    width = 800,
+    height = 600,
+    bgcol = "#3D1019", -- a coincidence
     graphcol = "#ffffff"
 }
 
